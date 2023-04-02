@@ -1,0 +1,7 @@
+image_name: "personal-site"
+container_name: "personal-site"
+
+dest_repo_dir: "personal-site"
+
+git_repo_path: "git@github.com:singapore9/personal-site.git"
+git_repo_branch: "main"
