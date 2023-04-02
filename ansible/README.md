@@ -24,4 +24,16 @@ ansible-vault [core 2.14.3]
 ```
 
 ## Usage
-TODO: add info about all the playbooks (for setting up, for updating specific repos)
+There are 4 playbooks.
+
+####playbook.yml 
+for configuring instance
+```bash
+ ansible-playbook playbook.yml --vault-password-file PASSWORD_FILE
+```
+
+####update-( personal-site | sport-bot | sport-system ).yml
+for updating specific subdomain and its data
+```bash
+ ansible-playbook PLAYBOOK_FILE --vault-password-file PASSWORD_FILE
+```
