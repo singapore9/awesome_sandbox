@@ -3,3 +3,4 @@
   roles:
    - install
    - create_network
+   - sport_system
