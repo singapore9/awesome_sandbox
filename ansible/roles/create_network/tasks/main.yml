@@ -1,0 +1,13 @@
+---
+- name: Set variables
+  set_fact:
+    no_such_network: "Error: No such network: {{private_network_name}}"
+
+- name: Check is private network exist
+  shell: "docker network inspect {{private_network_name}}"
+  register: inspect_output
+  ignore_errors: true
+
+- name: Create private network
+  shell: "docker network create -d bridge {{private_network_name}}"
+  when: inspect_output.stderr == no_such_network
