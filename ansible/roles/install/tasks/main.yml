@@ -1,0 +1,18 @@
+---
+- name: Install GIT
+  yum:
+    name: "git"
+    state: latest
+
+- name: Install DOCKER
+  yum:
+    name: "docker"
+    state: latest
+
+- name: install DOCKER COMPOSE
+  shell: "sudo curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose && sudo chmod +x /usr/local/bin/docker-compose"
+
+- name: Create directory for work with repos
+  file:
+    path: "{{dest_base_path}}"
+    state: directory
