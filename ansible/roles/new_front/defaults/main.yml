@@ -1,0 +1,9 @@
+image_name: "personal-svelte-site"
+container_name: "personal-svelte-site"
+
+dest_repo_dir: "check-personal-svelte-site"
+local_repo_path: "../../personal-site-svelte"
+
+git_repo_path: "git@github.com:singapore9/personal-site-svelte.git"
+git_repo_branch: "dockerfile-for-aws"
+

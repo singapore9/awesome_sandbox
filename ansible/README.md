@@ -24,7 +24,7 @@ ansible-vault [core 2.14.3]
 ```
 
 ## Usage
-There are 4 playbooks.
+There are 5 playbooks.
 
 ####playbook.yml 
 for configuring instance
@@ -32,7 +32,7 @@ for configuring instance
  ansible-playbook playbook.yml --vault-password-file PASSWORD_FILE
 ```
 
-####update-( personal-site | sport-bot | sport-system ).yml
+####update-( personal-site | sport-bot | sport-system | new-front).yml
 for updating specific subdomain and its data
 ```bash
  ansible-playbook PLAYBOOK_FILE --vault-password-file PASSWORD_FILE

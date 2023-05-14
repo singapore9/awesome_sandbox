@@ -1,0 +1,70 @@
+---
+- name: Clone the repo
+  git:
+    accept_newhostkey: true
+    key_file: "{{git_repo_key_path}}"
+    repo: "{{git_repo_path}}"
+    dest: "{{dest_base_path}}/{{dest_repo_dir}}"
+    version: "{{git_repo_branch}}"
+
+- name: Generate node_modules directory
+  delegate_to: localhost
+  shell: |
+    source ~/.bash_profile &&
+    nvm use v20 &&
+    npm i
+  args:
+    chdir: "{{local_repo_path}}"
+    executable: /bin/bash
+
+- name: Generate build directory
+  delegate_to: localhost
+  shell: |
+    source ~/.bash_profile &&
+    nvm use v20 &&
+    npm run build
+  args:
+    chdir: "{{local_repo_path}}"
+    executable: /bin/bash
+
+- name: Archive generated directories
+  delegate_to: localhost
+  archive:
+    path: "{{local_repo_path}}/{{item.folder_name}}"
+    dest: "{{local_repo_path}}/{{item.folder_name}}.tgz"
+  loop:
+    - folder_name: ".svelte-kit"
+    - folder_name: "build"
+    - folder_name: "node_modules"
+
+- name: Unarchive generated archives to remote host
+  unarchive:
+    src: "{{local_repo_path}}/{{ item.folder_name }}.tgz"
+    dest: "{{dest_base_path}}/{{dest_repo_dir}}"
+  loop:
+    - folder_name: ".svelte-kit"
+    - folder_name: "build"
+    - folder_name: "node_modules"
+
+- name: Get current container
+  shell: "docker ps -q -f ancestor={{image_name}}"
+  register: container_id
+
+- name: Docker stop
+  shell: >-
+    docker stop {{container_id.stdout}} &&
+    docker rename {{container_name}} {{container_name}}_{{container_id.stdout}}
+  when: container_id.stdout != ""
+
+- name: Docker build
+  shell: "docker build -t {{image_name}} {{dest_base_path}}/{{dest_repo_dir}}"
+
+
+- name: Docker run
+  shell: >-
+    docker run -d -p 8010:8000 --name {{container_name}}
+    -it {{image_name}}
+    /bin/bash -c 'node index.js'
+
+- name: Docker network connect with container
+  shell: "docker network connect {{private_network_name}} {{container_name}}"
