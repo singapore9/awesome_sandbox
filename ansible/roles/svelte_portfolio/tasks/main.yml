@@ -1,0 +1,29 @@
+---
+- name: Clone the repo
+  git:
+    accept_newhostkey: true
+    key_file: "{{git_repo_key_path}}"
+    repo: "{{git_repo_path}}"
+    dest: "{{dest_base_path}}/{{dest_repo_dir}}"
+    version: "{{git_repo_branch}}"
+
+- name: Get current container
+  shell: "docker ps -q -f ancestor={{image_name}}"
+  register: container_id
+
+- name: Docker stop
+  shell: >-
+    docker stop {{container_id.stdout}} &&
+    docker rename {{container_name}} {{container_name}}_{{container_id.stdout}}
+  when: container_id.stdout != ""
+
+- name: Docker build
+  shell: "docker build -t {{image_name}} {{dest_base_path}}/{{dest_repo_dir}}"
+
+- name: Docker run
+  shell: >-
+    docker run -d -p 3010:3000 --name {{container_name}}
+    {{image_name}}
+
+- name: Docker network connect with container
+  shell: "docker network connect {{private_network_name}} {{container_name}}"

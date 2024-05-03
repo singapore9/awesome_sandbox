@@ -1,0 +1,7 @@
+image_name: "personal-svelte-portfolio"
+container_name: "svelte-portfolio"
+
+dest_repo_dir: "svelte-portfolio"
+
+git_repo_path: "git@github.com:singapore9/portfolio-site.git"
+git_repo_branch: "main"

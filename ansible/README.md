@@ -32,7 +32,7 @@ for configuring instance
  ansible-playbook playbook.yml --vault-password-file PASSWORD_FILE
 ```
 
-####update-( personal-site | sport-bot | sport-system | new-front).yml
+####update-( personal-site | sport-bot | sport-system | svelte-portfolio).yml
 for updating specific subdomain and its data
 ```bash
  ansible-playbook PLAYBOOK_FILE --vault-password-file PASSWORD_FILE
