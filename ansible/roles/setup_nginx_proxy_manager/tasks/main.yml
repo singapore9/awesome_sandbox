@@ -1,0 +1,9 @@
+- name: Generate docker compose config file
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{dest_base_path}}/docker-compose.yml"
+
+- name: Start ngingx manager's container
+  shell:
+    chdir: "{{dest_base_path}}"
+    cmd: "docker-compose up -d"
