@@ -1,13 +1,25 @@
 ---
 - name: Set variables
   set_fact:
-    no_such_network: "Error: No such network: {{private_network_name}}"
+    no_such_network1: "Error: No such network: {{private_network_name}}"
+    no_such_network2: "Error response from daemon: network {{private_network_name}} not found"
+
+- name: Run docker
+  become: true
+  shell: "service docker start"
+
+- name: Set usermode
+  become: true
+  shell: "usermod -a -G docker {{ansible_ssh_user}}"
 
 - name: Check is private network exist
+  become: true
   shell: "docker network inspect {{private_network_name}}"
   register: inspect_output
   ignore_errors: true
 
 - name: Create private network
+  become: true
   shell: "docker network create -d bridge {{private_network_name}}"
-  when: inspect_output.stderr == no_such_network
+  when: (inspect_output.stderr == no_such_network1) or
+        (inspect_output.stderr == no_such_network2)
