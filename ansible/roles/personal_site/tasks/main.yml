@@ -12,7 +12,9 @@
   register: container_id
 
 - name: Docker build
-  shell: "docker build -t {{image_name}} {{dest_base_path}}/{{dest_repo_dir}}"
+  shell:
+    chdir: "{{dest_base_path}}/{{dest_repo_dir}}"
+    cmd: "docker build -t {{image_name}} ."
 
 - name: Docker stop
   shell: >-
