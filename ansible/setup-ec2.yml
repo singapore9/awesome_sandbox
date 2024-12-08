@@ -1,0 +1,9 @@
+---
+- hosts: aws
+  roles:
+   - install
+   - create_network
+   - setup_nginx_proxy_manager
+   - personal_site
+   - sport_system
+   - sport_bot
